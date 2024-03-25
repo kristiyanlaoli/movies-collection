@@ -7,11 +7,8 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   isAddingMovie: false,
-  // isEditingTask: false,
-  // editTaskId: null,
-  // category: "urgent",
-  // filteredCategory: "all",
-  // message: "",
+  isEditingMovie: false,
+  isDeleteMovie: false,
 };
 
 export const getMovies = createAsyncThunk(
@@ -49,65 +46,51 @@ export const addMovies = createAsyncThunk(
   }
 );
 
-// export const deleteTask = createAsyncThunk(
-//   "task/deleteTask",
-//   async (id, thunkAPI) => {
-//     try {
-//       const response = await axios.delete(
-//         `http://localhost:4200/api/tasks/${id}`
-//       );
-//       return response.data;
-//     } catch (error) {
-//       if (error.response) {
-//         const message = error.response;
-//         return thunkAPI.rejectWithValue(message);
-//       }
-//     }
-//   }
-// );
+export const editMovies = createAsyncThunk(
+  "movies/editMovies",
+  async (movie, thunkAPI) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:4200/api/movies/${movie.id}`,
+        {
+          title: movie.title,
+          director: movie.director,
+          summary: movie.summary,
+          genre: movie.genre,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        const message = error.response;
+        return thunkAPI.rejectWithValue(message);
+      }
+    }
+  }
+);
 
-// export const editTask = createAsyncThunk(
-//   "task/editTask",
-//   async (task, thunkAPI) => {
-//     try {
-//       const response = await axios.put(
-//         `http://localhost:4200/api/tasks/${task.id}`,
-//         {
-//           title: task.title,
-//           summary: task.summary,
-//           category: task.category,
-//         }
-//       );
-//       return response.data;
-//     } catch (error) {
-//       if (error.response) {
-//         const message = error.response;
-//         return thunkAPI.rejectWithValue(message);
-//       }
-//     }
-//   }
-// );
+// delete movie
+export const deleteMovies = createAsyncThunk(
+  "movies/deleteMovies",
+  async (id, thunkAPI) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:4200/api/movies/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        const message = error.response;
+        return thunkAPI.rejectWithValue(message);
+      }
+    }
+  }
+);
 
 export const moviesSlice = createSlice({
   name: "movies",
   initialState,
-  reducers: {
-    // setCategory: (state, action) => {
-    //   state.category = action.payload;
-    // },
-    // setIsAddingTask: (state, action) => {
-    //   state.isAddingTask = action.payload;
-    // },
-    // setFilteredCategory: (state, action) => {
-    //   state.filteredCategory = action.payload;
-    // },
-    // setIsEditingTask: (state, action) => {
-    //   state.isEditingTask = action.payload;
-    // },
-    // setEditTaskId: (state, action) => {
-    //   state.editTaskId = action.payload;
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     // Get movies data
     builder.addCase(getMovies.pending, (state) => {
@@ -139,45 +122,40 @@ export const moviesSlice = createSlice({
       state.message = action.payload;
     });
 
-    // // Delete task data
-    // builder.addCase(deleteTask.pending, (state) => {
-    //   state.isLoading = true;
-    // });
-    // builder.addCase(deleteTask.fulfilled, (state, action) => {
-    //   state.isLoading = false;
-    //   state.isSuccess = true;
-    //   state.tasks = state.tasks.filter((task) => task.id !== action.payload.id);
-    // });
-    // builder.addCase(deleteTask.rejected, (state, action) => {
-    //   state.isLoading = false;
-    //   state.isError = true;
-    //   state.message = action.payload;
-    // });
+    // Edit Movies data
+    builder.addCase(editMovies.pending, (state) => {
+      state.isEditingMovie = true;
+    });
+    builder.addCase(editMovies.fulfilled, (state, action) => {
+      state.isEditingMovie = false;
+      state.isSuccess = true;
+      state.movies = state.movies.map((movie) =>
+        movie.id === action.payload.id ? action.payload : movie
+      );
+    });
+    builder.addCase(editMovies.rejected, (state, action) => {
+      state.isEditingMovie = false;
+      state.isError = true;
+      state.message = action.payload;
+    });
 
-    // // Edit task data
-    // builder.addCase(editTask.pending, (state) => {
-    //   state.isEditingTask = true;
-    // });
-    // builder.addCase(editTask.fulfilled, (state, action) => {
-    //   state.isEditingTask = false;
-    //   state.isSuccess = true;
-    //   state.tasks = state.tasks.map((task) =>
-    //     task.id === action.payload.id ? action.payload : task
-    //   );
-    // });
-    // builder.addCase(editTask.rejected, (state, action) => {
-    //   state.isEditingTask = false;
-    //   state.isError = true;
-    //   state.message = action.payload;
-    // });
+    // Delete movie data
+    builder.addCase(deleteMovies.pending, (state) => {
+      state.isDeleteMovie = true;
+    });
+    builder.addCase(deleteMovies.fulfilled, (state, action) => {
+      state.isDeleteMovie = false;
+      state.isSuccess = true;
+      state.movies = state.movies.filter(
+        (movie) => movie.id !== action.payload.id
+      );
+    });
+    builder.addCase(deleteMovies.rejected, (state, action) => {
+      state.isDeleteMovie = false;
+      state.isError = true;
+      state.message = action.payload;
+    });
   },
 });
 
-// export const {
-//   // setCategory,
-// setIsAddingTask,
-//   // setFilteredCategory,
-//   // setIsEditingTask,
-//   // setEditTaskId,
-// } = moviesSlice.actions;
 export default moviesSlice.reducer;

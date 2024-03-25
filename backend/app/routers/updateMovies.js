@@ -37,7 +37,23 @@ router.put("/movies/:id", async (req, res) => {
       });
     }
 
-    res.status(200).json({ movie });
+    // Get the updated movie and include the genres
+    const updatedMovie = await prisma.movie.findUnique({
+      where: {
+        id: movie.id,
+      },
+      include: {
+        genres: true,
+      },
+    });
+
+    // Map over the genres to replace the genres array with an array of genreIds
+    const modifiedMovie = {
+      ...updatedMovie,
+      genres: updatedMovie.genres.map((genre) => genre.genreId),
+    };
+
+    res.status(200).json(modifiedMovie);
   } catch (error) {
     res.status(400).json({ message: "Unable to update movie" });
   }

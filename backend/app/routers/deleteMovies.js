@@ -20,7 +20,9 @@ router.delete("/movies/:id", async (req, res) => {
       },
     });
 
-    res.status(200).json({ message: "Movie deleted successfully" });
+    console.log(movie);
+
+    res.status(200).json(movie);
   } catch (error) {
     res.status(400).json({ message: "Unable to delete movie" });
   }

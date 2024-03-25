@@ -7,9 +7,13 @@ const GENRES = {
   5: "Animation",
 };
 
-const MovieCard = ({ title, director, summary, genres }) => {
+const MovieCard = ({ title, director, summary, genres, onClick }) => {
   return (
-    <div className="bg-gray-900 m-2 p-2 rounded-md">
+    <div
+      onClick={onClick}
+      style={{ cursor: "pointer" }}
+      className="bg-gray-900 m-2 p-2 rounded-md"
+    >
       <h2 className="font-bold text-red-500 text-base">{title}</h2>
       <p className="text-slate-300 text-sm">{director}</p>
       <p className="mt-2 text-slate-500">{summary}</p>

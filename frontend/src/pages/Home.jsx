@@ -12,8 +12,13 @@ const Home = () => {
   const dispatch = useDispatch();
   const { movies } = useSelector((state) => state.movies);
   const navigate = useNavigate();
-  const Handle = () => {
+
+  const HandleNew = () => {
     navigate("/new");
+  };
+
+  const HandleDetail = (id) => {
+    navigate(`/detail/${id}`);
   };
 
   // get movies
@@ -32,10 +37,11 @@ const Home = () => {
           director={movie.director}
           summary={movie.summary}
           genres={movie.genres}
+          onClick={() => HandleDetail(movie.id)}
         />
       ))}
 
-      <AddButton onClick={Handle} />
+      <AddButton onClick={HandleNew} />
     </>
   );
 };

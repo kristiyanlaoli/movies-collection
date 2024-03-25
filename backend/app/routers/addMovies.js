@@ -25,7 +25,23 @@ router.post("/movies", async (req, res) => {
       });
     }
 
-    res.status(201).json({ movie });
+    // Get the created movie and include the genres
+    const createdMovie = await prisma.movie.findUnique({
+      where: {
+        id: movie.id,
+      },
+      include: {
+        genres: true,
+      },
+    });
+
+    // Map over the genres to replace the genres array with an array of genreIds
+    const modifiedMovie = {
+      ...createdMovie,
+      genres: createdMovie.genres.map((genre) => genre.genreId),
+    };
+
+    res.status(201).json(modifiedMovie);
   } catch (error) {
     res.status(400).json({ message: "Unable to add movie" });
   }
