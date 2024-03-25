@@ -87,6 +87,24 @@ export const deleteMovies = createAsyncThunk(
   }
 );
 
+//search movie
+export const searchMovies = createAsyncThunk(
+  "movies/searchMovies",
+  async (search, thunkAPI) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:4200/api/movies/search/${search}`
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response) {
+        const message = error.response.error;
+        return thunkAPI.rejectWithValue(message);
+      }
+    }
+  }
+);
+
 export const moviesSlice = createSlice({
   name: "movies",
   initialState,
@@ -152,6 +170,21 @@ export const moviesSlice = createSlice({
     });
     builder.addCase(deleteMovies.rejected, (state, action) => {
       state.isDeleteMovie = false;
+      state.isError = true;
+      state.message = action.payload;
+    });
+
+    // Search movie data
+    builder.addCase(searchMovies.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(searchMovies.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.movies = action.payload;
+    });
+    builder.addCase(searchMovies.rejected, (state, action) => {
+      state.isLoading = false;
       state.isError = true;
       state.message = action.payload;
     });

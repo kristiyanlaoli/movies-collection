@@ -4,6 +4,7 @@ import SaveButtom from "../components/SaveButtom";
 import { useDispatch, useSelector } from "react-redux";
 import { editMovies, deleteMovies } from "../features/moviesSlice.js";
 import { useNavigate, useParams } from "react-router-dom";
+
 const genres = [
   { id: 1, name: "Action" },
   { id: 2, name: "Comedy" },
