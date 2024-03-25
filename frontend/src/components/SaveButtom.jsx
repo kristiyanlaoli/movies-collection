@@ -1,8 +1,10 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import { Save } from "lucide-react";
 
-const SaveButtom = () => {
-  return <Save className="w-7 h-7 text-red-600 cursor-pointer" />;
+const SaveButtom = ({ onClick }) => {
+  return (
+    <Save onClick={onClick} className="w-7 h-7 text-red-600 cursor-pointer" />
+  );
 };
 
 export default SaveButtom;

@@ -1,21 +1,25 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
-import HeaderNewMovie from "../components/HeaderNewMovie";
+import { useState } from "react";
+import DeleteButtom from "../components/DeleteButtom";
+import SaveButtom from "../components/SaveButtom";
+import { useDispatch, useSelector } from "react-redux";
+import { addMovies } from "../features/moviesSlice.js";
+import { useNavigate } from "react-router-dom";
 const genres = [
   { id: 1, name: "Action" },
-  { id: 2, name: "Adventure" },
-  { id: 3, name: "Comedy" },
-  { id: 4, name: "Drama" },
-  { id: 5, name: "Fantasy" },
-  { id: 6, name: "Horror" },
-  { id: 7, name: "Mystery" },
-  { id: 8, name: "Romance" },
-  { id: 9, name: "Thriller" },
-  { id: 10, name: "Sci-Fi" },
+  { id: 2, name: "Comedy" },
+  { id: 3, name: "Drama" },
+  { id: 4, name: "Sci-Fi" },
+  { id: 5, name: "Animation" },
 ];
 
 const NewMovie = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { isAddingMovie, isSuccess } = useSelector((state) => state.movies);
   const [selectedGenres, setSelectedGenres] = useState([]);
+  const [title, setTitle] = useState("");
+  const [director, setDirector] = useState("");
+  const [summary, setSummary] = useState("");
 
   const handleSelect = (id) => {
     if (selectedGenres.includes(id)) {
@@ -24,9 +28,35 @@ const NewMovie = () => {
       setSelectedGenres([...selectedGenres, id]);
     }
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newMovie = {
+      title: title,
+      director: director,
+      summary: summary,
+      genre: selectedGenres,
+    };
+
+    dispatch(addMovies(newMovie));
+    if (isSuccess === true && !isAddingMovie) {
+      navigate("/");
+    }
+  };
+
+  const handleDelete = () => {
+    navigate("/");
+  };
+
   return (
     <>
-      <HeaderNewMovie />
+      <header className="bg-gray-950 mx-4 h-20 flex justify-between items-center font-bold text-red-600 text-xl border-b-2 border-b-red-500">
+        Add New Movie
+        <div className="flex gap-5">
+          <DeleteButtom onClick={handleDelete} />
+          <SaveButtom type="submit" onClick={handleSubmit} />
+        </div>
+      </header>
       <div className="container mx-auto p-4">
         <form>
           <div className="mb-4">
@@ -41,6 +71,7 @@ const NewMovie = () => {
               id="title"
               type="text"
               placeholder="Title"
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
           <div className="mb-4">
@@ -55,6 +86,9 @@ const NewMovie = () => {
               id="director"
               type="text"
               placeholder="Director Name"
+              onChange={(e) => {
+                setDirector(e.target.value);
+              }}
             />
           </div>
           <div className="mb-4">
@@ -68,6 +102,9 @@ const NewMovie = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="summary"
               placeholder="Summary"
+              onChange={(e) => {
+                setSummary(e.target.value);
+              }}
             ></textarea>
           </div>
         </form>
