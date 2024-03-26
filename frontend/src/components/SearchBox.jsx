@@ -4,7 +4,6 @@ import { searchMovies } from "../features/moviesSlice.js";
 
 const SearchBox = () => {
   const dispatch = useDispatch();
-
   const [search, setSearch] = useState("");
   const [timer, setTimer] = useState(null);
 
@@ -18,7 +17,7 @@ const SearchBox = () => {
         setTimeout(() => {
           dispatch(searchMovies(search));
         }, 1000)
-      ); // Delay for 1 second
+      );
     }
   }, [search]);
 

@@ -11,6 +11,7 @@ import { getMovies } from "../../src/features/moviesSlice.js";
 const Home = () => {
   const dispatch = useDispatch();
   const { movies } = useSelector((state) => state.movies);
+
   const navigate = useNavigate();
 
   const HandleNew = () => {
@@ -30,16 +31,18 @@ const Home = () => {
     <>
       <Header />
       <SearchBox />
-      {movies.map((movie) => (
-        <MovieCard
-          key={movie.id}
-          title={movie.title}
-          director={movie.director}
-          summary={movie.summary}
-          genres={movie.genres}
-          onClick={() => HandleDetail(movie.id)}
-        />
-      ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4">
+        {movies.map((movie) => (
+          <MovieCard
+            key={movie.id}
+            title={movie.title}
+            director={movie.director}
+            summary={movie.summary}
+            genres={movie.genres}
+            onClick={() => HandleDetail(movie.id)}
+          />
+        ))}
+      </div>
 
       <AddButton onClick={HandleNew} />
     </>

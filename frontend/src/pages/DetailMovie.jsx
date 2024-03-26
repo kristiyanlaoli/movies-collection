@@ -17,7 +17,7 @@ const DetailMovie = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isEditingMovie, isSuccess, isDeleteMovie, movies } = useSelector(
+  const { isEditingMovie, isDeleteMovie, movies } = useSelector(
     (state) => state.movies
   );
   const { movieId } = useParams();
@@ -48,14 +48,14 @@ const DetailMovie = () => {
     };
 
     dispatch(editMovies(movieData));
-    if (isSuccess === true && !isEditingMovie) {
+    if (!isEditingMovie) {
       navigate("/");
     }
   };
 
   const handleDelete = () => {
     dispatch(deleteMovies(Number(movieId)));
-    if (isSuccess === true && !isDeleteMovie) navigate("/");
+    if (!isDeleteMovie) navigate("/");
   };
 
   return (

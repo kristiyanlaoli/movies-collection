@@ -39,7 +39,7 @@ const NewMovie = () => {
     };
 
     dispatch(addMovies(newMovie));
-    if (isSuccess === true && !isAddingMovie) {
+    if (!isAddingMovie) {
       navigate("/");
     }
   };
@@ -102,6 +102,7 @@ const NewMovie = () => {
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               id="summary"
               placeholder="Summary"
+              maxLength={100}
               onChange={(e) => {
                 setSummary(e.target.value);
               }}

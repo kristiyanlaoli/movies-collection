@@ -12,11 +12,13 @@ const MovieCard = ({ title, director, summary, genres, onClick }) => {
     <div
       onClick={onClick}
       style={{ cursor: "pointer" }}
-      className="bg-gray-900 m-2 p-2 rounded-md"
+      className="bg-gray-900 m-2 p-2 rounded-md h-full flex flex-col justify-between"
     >
-      <h2 className="font-bold text-red-500 text-base">{title}</h2>
-      <p className="text-slate-300 text-sm">{director}</p>
-      <p className="mt-2 text-slate-500">{summary}</p>
+      <div>
+        <h2 className="font-bold text-red-500 text-base">{title}</h2>
+        <p className="text-slate-300 text-sm">{director}</p>
+        <p className="mt-2 text-slate-500">{summary}</p>
+      </div>
       <div className="mt-2 flex gap-1 justify-end text-xs text-red-500">
         {genres.map((genre) => (
           <p

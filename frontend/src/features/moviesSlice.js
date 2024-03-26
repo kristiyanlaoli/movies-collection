@@ -3,12 +3,11 @@ import axios from "axios";
 
 const initialState = {
   movies: [],
-  isError: false,
-  isSuccess: false,
   isLoading: false,
   isAddingMovie: false,
   isEditingMovie: false,
   isDeleteMovie: false,
+  isSearchMovie: false,
 };
 
 export const getMovies = createAsyncThunk(
@@ -98,7 +97,7 @@ export const searchMovies = createAsyncThunk(
       return response.data;
     } catch (error) {
       if (error.response) {
-        const message = error.response.error;
+        const message = error.response.status;
         return thunkAPI.rejectWithValue(message);
       }
     }
@@ -116,12 +115,10 @@ export const moviesSlice = createSlice({
     });
     builder.addCase(getMovies.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.isSuccess = true;
       state.movies = action.payload;
     });
     builder.addCase(getMovies.rejected, (state, action) => {
       state.isLoading = false;
-      state.isError = true;
       state.message = action.payload;
     });
 
@@ -131,12 +128,10 @@ export const moviesSlice = createSlice({
     });
     builder.addCase(addMovies.fulfilled, (state, action) => {
       state.isAddingMovie = false;
-      state.isSuccess = true;
       state.movies = [...state.movies, action.payload];
     });
     builder.addCase(addMovies.rejected, (state, action) => {
       state.isAddingMovie = false;
-      state.isError = true;
       state.message = action.payload;
     });
 
@@ -146,14 +141,12 @@ export const moviesSlice = createSlice({
     });
     builder.addCase(editMovies.fulfilled, (state, action) => {
       state.isEditingMovie = false;
-      state.isSuccess = true;
       state.movies = state.movies.map((movie) =>
         movie.id === action.payload.id ? action.payload : movie
       );
     });
     builder.addCase(editMovies.rejected, (state, action) => {
       state.isEditingMovie = false;
-      state.isError = true;
       state.message = action.payload;
     });
 
@@ -163,29 +156,25 @@ export const moviesSlice = createSlice({
     });
     builder.addCase(deleteMovies.fulfilled, (state, action) => {
       state.isDeleteMovie = false;
-      state.isSuccess = true;
       state.movies = state.movies.filter(
         (movie) => movie.id !== action.payload.id
       );
     });
     builder.addCase(deleteMovies.rejected, (state, action) => {
       state.isDeleteMovie = false;
-      state.isError = true;
       state.message = action.payload;
     });
 
     // Search movie data
     builder.addCase(searchMovies.pending, (state) => {
-      state.isLoading = true;
+      state.isSearchMovie = true;
     });
     builder.addCase(searchMovies.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.isSuccess = true;
+      state.isSearchMovie = false;
       state.movies = action.payload;
     });
     builder.addCase(searchMovies.rejected, (state, action) => {
-      state.isLoading = false;
-      state.isError = true;
+      state.isSearchMovie = false;
       state.message = action.payload;
     });
   },
