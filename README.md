@@ -3,18 +3,6 @@
 Ini adalah API sederhana untuk memanage movies collection yang menerapkan
 prinsip CRUD (Create, Read, Update, dan Delete).
 
-# Cara Menjalankan
-
-## Menjalankan Api
-
-- Buka folder backend, kemudian ketik: `npm start`
-- Api berjalan di localhost 4200
-
-## Menjalankan App
-
-- Buka folder frontend, kemudian ketik: `npm run dev`
-- App berjalan di localhost 5173 atau 5174
-
 ## Endpoints
 
 1. Endpoint: POST `/api/movies`
